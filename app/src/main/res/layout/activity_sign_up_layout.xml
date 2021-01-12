@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <RelativeLayout
+        android:id="@+id/root_signup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite">
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp300"
+            android:background="@color/color_main" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include
+                android:layout_marginTop="@dimen/dp40"
+                layout="@layout/include_icon_app_layout"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content" />
+
+            <TextView
+                android:id="@+id/text_view_title"
+                style="@style/TitleTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp40"
+                android:layout_gravity="center"
+                android:gravity="center_vertical"
+                android:text="@string/title_sign_up" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp30"
+                app:cardCornerRadius="@dimen/dp30"
+                app:cardElevation="@dimen/dp10"
+                android:layout_marginTop="@dimen/dp40"
+                app:cardPreventCornerOverlap="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_white_button_r30"
+                    android:orientation="vertical"
+                    android:padding="@dimen/dp40">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/text_input_name"
+                            style="@style/TextInputStyle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="@string/username_hint">
+
+                            <EditText
+                                android:id="@+id/edit_text_name"
+                                style="@style/EditTextStyle"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/dp70"
+                                android:imeOptions="actionNext"
+                                android:inputType="textPersonName"
+                                android:maxLength="8"
+                                android:paddingHorizontal="@dimen/dp20" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/text_input_display_name"
+                            style="@style/TextInputStyle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="@string/display_name">
+
+                            <EditText
+                                android:id="@+id/edit_text_display_name"
+                                style="@style/EditTextStyle"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/dp70"
+                                android:imeOptions="actionNext"
+                                android:inputType="textMultiLine"
+                                android:maxLength="28"
+                                android:paddingHorizontal="@dimen/dp20" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                    </LinearLayout>
+
+                    <include layout="@layout/email_and_password_layout" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/dp20"
+                        android:paddingBottom="@dimen/dp20">
+
+                        <CheckBox
+                            android:id="@+id/checkbox_terms_and_conditions"
+                            style="@style/SubTextViewStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/i_agree_text"
+                            android:textColor="@color/colorSimpleText"
+                            android:theme="@style/CheckBoxStyle" />
+
+                        <TextView
+                            android:id="@+id/text_view_term_and_conditions"
+                            style="@style/SubTextViewStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/term_amp_conditions_text"
+                            app:drawableBottomCompat="@drawable/line_drawable" />
+
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/button_create_account"
+                        style="@style/Widget.AppCompat.Button.Colored"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp70"
+                        android:layout_marginBottom="@dimen/dp10"
+                        android:text="@string/action_create_account"
+                        android:theme="@style/button_theme_color_main" />
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</ScrollView>

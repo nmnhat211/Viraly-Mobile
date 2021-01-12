@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:paddingEnd="@dimen/dp40"
+    android:paddingStart="@dimen/dp40"
+    android:background="@color/color_main"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/text_view_content1_bottom_welcome_screen"
+        style="@style/SubTextViewStyle"
+        android:layout_width="wrap_content"
+        android:textStyle="bold"
+        android:fontFamily="@font/gilroy_medium"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="@string/have_account"
+        android:textColor="@color/colorWhite" />
+
+
+    <Button
+        android:id="@+id/button_of_bottom_welcome_screen"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/title_sign_in"
+        android:theme="@style/button_theme_color_white" />
+</RelativeLayout>
