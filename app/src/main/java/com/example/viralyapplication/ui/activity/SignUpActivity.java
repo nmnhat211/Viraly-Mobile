@@ -194,6 +194,7 @@ public class SignUpActivity extends ToolbarActivity {
         username = edtUserName.getText().toString().trim();
         name = edtDisplayName.getText().toString().trim();
         password = edtPassword.getText().toString().trim();
+
         if (!Utils.isValidEmail(mail)) {
             Utils.showAlertDialogOk(SignUpActivity.this,
                     getString(R.string.error_txt),

@@ -44,6 +44,7 @@
                 <ImageView
                     android:id="@+id/iv_avatar_user"
                     android:layout_width="@dimen/dp280"
+                    android:background="@drawable/avatar"
                     android:layout_height="@dimen/dp280"
                     android:scaleType="centerCrop" />
 
@@ -69,7 +70,7 @@
             android:fontFamily="@font/gilroy_bold"
             android:gravity="center"
             android:maxLines="2"
-            android:text="adsadasd asdasd asdasdasd asdasd sd"
+            android:text="nmnhat211"
             android:textSize="30sp" />
 
         <TextView
@@ -96,7 +97,7 @@
             android:fontFamily="@font/gilroy_light_italic"
             android:gravity="center"
             android:singleLine="true"
-            android:text="@string/gmail_text"
+            android:text="nmnhat211@gmail.com"
             android:textColor="@color/colorGrey"
             android:textSize="23sp"
             android:textStyle="bold" />
@@ -115,7 +116,7 @@
                 android:layout_gravity="center"
                 android:fontFamily="@font/gilroy_regular"
                 android:singleLine="true"
-                android:text="0"
+                android:text="1"
                 android:textColor="@color/colorGrey"
                 android:textSize="23sp"
                 android:textStyle="bold" />
@@ -139,7 +140,7 @@
                 android:layout_marginLeft="@dimen/dp30"
                 android:fontFamily="@font/gilroy_regular"
                 android:singleLine="true"
-                android:text="0"
+                android:text="1"
                 android:textColor="@color/colorGrey"
                 android:textSize="23sp"
                 android:textStyle="bold" />

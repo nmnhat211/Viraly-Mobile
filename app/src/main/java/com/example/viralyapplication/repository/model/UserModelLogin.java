@@ -26,7 +26,7 @@ public class UserModelLogin implements Serializable {
         private String displayName;
         @SerializedName("uid")
         @Expose
-        private float uid;
+        private String uid;
         @SerializedName("created_at")
         @Expose
         private String createdAt;
@@ -85,11 +85,11 @@ public class UserModelLogin implements Serializable {
             this.displayName = displayName;
         }
 
-        public float  getUid() {
+        public String getUid() {
             return uid;
         }
 
-        public void setUid(float  uid) {
+        public void setUid(String  uid) {
             this.uid = uid;
         }
 

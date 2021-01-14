@@ -15,14 +15,6 @@
         android:orientation="vertical"
         android:padding="@dimen/dp20">
 
-        <TextView
-            android:id="@+id/text_view_title"
-            style="@style/TitleTextViewStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/dp20"
-            android:text="@string/news_feed_text" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -79,7 +71,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/gilroy_bold"
                         android:maxLines="2"
-                        android:textColor="@color/colorGrey"
+                        android:textColor="@color/color_main"
                         android:textSize="20sp" />
 
                 </LinearLayout>
@@ -94,7 +86,6 @@
                 android:layout_marginTop="@dimen/dp20"
                 android:background="@color/color_background1"
                 android:gravity="top"
-                android:text="Amazing good job bro!"
                 android:hint="@string/status_hint_text"
                 android:imeOptions="actionDone"
                 android:inputType="textMultiLine"
@@ -107,7 +98,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:layout_marginTop="@dimen/dp20">
 
                 <ImageView
@@ -129,7 +120,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp10"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"

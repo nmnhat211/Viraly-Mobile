@@ -13,37 +13,74 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.viralyapplication.R;
-import com.example.viralyapplication.repository.model.UserModel;
+import com.example.viralyapplication.repository.model.UserModelLogin;
+import com.example.viralyapplication.ui.activity.MyApplication;
 import com.example.viralyapplication.ui.activity.SignInActivity;
 import com.example.viralyapplication.ui.activity.SignUpActivity;
-import com.example.viralyapplication.ui.fragment.NewFeedFragment;
+import com.example.viralyapplication.ui.fragment.NewsFeedFragment;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import retrofit2.Response;
 
 public class Utils {
-    public static Context mContext;
+    public static MyApplication mContext = MyApplication.instance;
     private DialogListener mDialogListener;
     public static String mUsername = "";
     public static String mPassword = "";
     private static final int LONG_DELAY = 3500; // 3.5 seconds
     private static final int SHORT_DELAY = 2000;
+    public static String uid= "";
+
+    public static int getDefaultImage(){
+        return R.drawable.avatar;
+    }
+
+    public static int getDefaultLoadding(){
+        return R.drawable.loading_rect_thumb;
+    }
+
+
+    public static String getUid() {
+        return uid;
+    }
+
+    public static void setUid(String uid) {
+        Utils.uid = uid;
+    }
+
+
+    private static Utils sGlobalVariable;
+
+    public static Utils getInstance() {
+        if (sGlobalVariable == null) {
+            sGlobalVariable = new Utils();
+        }
+        return sGlobalVariable;
+    }
 
     public static void showKeyBoard(View view, boolean isShow) {
         view.requestFocus();
@@ -66,9 +103,9 @@ public class Utils {
         context.startActivity(intent);
     }
 
-    public static void goToNewFeedFragment(Context context, UserModel userModel) {
+    public static void goToNewFeedFragment(Context context, UserModelLogin data) {
         Intent intent = new Intent(context, SignInActivity.class);
-        intent.putExtra(NewFeedFragment.KEY_USER_DATA, userModel);
+        intent.putExtra(NewsFeedFragment.KEY_USER_DATA, data);
         context.startActivity(intent);
     }
 
@@ -157,25 +194,6 @@ public class Utils {
         dialog.show();
     }
 
-//    public static void showAlertDialog(Context context, String title, String message,
-//                                       DialogInterface.OnClickListener positiveListener, DialogInterface.OnClickListener negativeListener) {
-//        if((context instanceof Activity && ((Activity) context).isFinishing())
-//                || TextUtils.isEmpty(message)) return;
-//        Typeface typefaceWithFont = Typeface.createFromAsset(getAssets(), "fonts/gilroy_medium.ttf");
-//        AlertDialog.Builder builder =  new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.Theme_AppCompat_Light_Dialog))
-//                .setTitle(typeface(typefaceWithFont, title))
-//                .setMessage(message)
-//                .setPositiveButton(getString(R.string.ok_txt), positiveListener)
-//                .setNegativeButton(R.string.cancel_txt, negativeListener);
-//        builder.setCancelable(false);
-//        AlertDialog alertDialog = builder.create();
-//        alertDialog.show();
-//        alertDialog.getWindow().getAttributes();
-//        TextView textView = (TextView) alertDialog.findViewById(android.R.id.message);
-//        Button btnPositive = (Button) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-//        Button btnNegative = (Button) alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-//    }
-
 
     public static void showAlertDialog(Context context, String title, String content) {
         new AlertDialog.Builder(context)
@@ -211,7 +229,7 @@ public class Utils {
 
     public static void sendBroadCastLogin(Context context, String mail, String password) {
         LocalBroadcastManager broadcaster = LocalBroadcastManager.getInstance(context);
-        Intent intent = new Intent(SignInActivity.KEY_CREATE_ACCOUNT_DONE);
+        Intent intent = new Intent(SignInActivity.KEY_AUTO_LOGIN);
         intent.putExtra(SignInActivity.KEY_EMAIL, mail);
         intent.putExtra(SignInActivity.KEY_PASSWORD, password);
         broadcaster.sendBroadcast(intent);
@@ -243,7 +261,7 @@ public class Utils {
         return pref.getBoolean(Constant.KEY_REMEMBER_ME, false);
     }
 
-    public static String getUsername(Context context) {
+    public static String getEmail(Context context) {
         SharedPreferences pref = context.getSharedPreferences(Constant.PREFS_NAME, Context.MODE_PRIVATE);
         mUsername = pref.getString(Constant.KEY_USERNAME, "null");
         return mUsername;
@@ -271,7 +289,7 @@ public class Utils {
         } else {
             toast = Toast.makeText(context, content, SHORT_DELAY);
         }
-        toast.setGravity(Gravity.CENTER, 0, 0);
+//        toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
 
@@ -292,4 +310,41 @@ public class Utils {
                     (dialogInterface, i) -> dialogInterface.dismiss());
         }
     }
+    public static String cutSymb(String string){
+        return string.replaceAll("[-+.^:,]","");
+    }
+
+    public static void loadCircleView(Context context, String img_url, ImageView imgView, int roundingRadius) {
+        RequestOptions requestOptions = new RequestOptions()
+                .transforms(new RoundedCorners(roundingRadius))
+                .error(getDefaultImage())
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+
+        Glide.with(context)
+                .load(img_url)
+                .apply(requestOptions)
+                .into(imgView);
+
+    }
+
+    public static void loadView(Context context, String img_url, ImageView imgView) {
+        RequestOptions requestOptions = new RequestOptions()
+                .placeholder(getDefaultImage())
+                .error(getDefaultImage())
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
+
+        Glide.with(context)
+                .load(img_url)
+                .apply(requestOptions)
+                .into(imgView);
+
+    }
+
+//    public static List<String> getContent(List<String> content){
+//            List<String> url;
+//            for (int i, i < content.size()){
+//                url.add( "url");
+//            }
+//            return content;
+//    }
 }

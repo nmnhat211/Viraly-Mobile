@@ -31,14 +31,6 @@ public class TaskExecuter {
      */
     static Handler mUIThreadHandler;
 
-    /*
-     * Thread pool dành cho urgent task, thông thường chỉ cần dùng normal task,
-     * urgent task chỉ dùng đến khi thực sự cần ưu tiên cao vì số thread này
-     * giới hạn và dành riêng cho những task đặc thù như khi mở một màn hình
-     * đang hiện loading dialog thì nên dùng cái này và khi loading dialog đóng
-     * thì cái này đã xong, những việc ko block màn hình để chờ thì dùng normal
-     * thread pool là được
-     */
     private static final int CORE_URGENT_POOL_SIZE = 2;
     private static final int MAXIMUM_URGENT_POOL_SIZE = 2;
     private final BlockingQueue<Runnable> mUrgentTaskQueue;

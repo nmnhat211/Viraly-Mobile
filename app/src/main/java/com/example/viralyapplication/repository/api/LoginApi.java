@@ -29,13 +29,6 @@ public interface LoginApi {
     @GET("users/verify")
     Call<EmailVerifyModel> getVerify();
 
-    @Headers("Content-Type: application/json")
-    @Multipart
-    @POST("users/register")
-    Call<UserModel> registerUser(@Part("email") RequestBody email,
-                                 @Part("username") RequestBody username,
-                                 @Part("display_name") RequestBody name,
-                                 @Part("password") RequestBody password);
 
     @Headers("Content-Type: application/json")
     @POST("users/register")

@@ -55,7 +55,7 @@ public class SignInActivity extends BaseFragmentActivity {
     private boolean isMailEmpty = true, isPasswordEmpty = true;
     private SharedPreferences mPerPreferences;
     private String mUsername, mPassword;
-    public static final String KEY_CREATE_ACCOUNT_DONE = "create_account_successfully";
+    public static final String KEY_AUTO_LOGIN = "key_auto_login";
     public static final String KEY_EMAIL = "signIn_activity_email";
     public static final String KEY_PASSWORD = "signIn_activity_password";
 
@@ -69,13 +69,10 @@ public class SignInActivity extends BaseFragmentActivity {
                 initView();
                 String email = intent.getExtras().getString(KEY_EMAIL);
                 String password = intent.getExtras().getString(KEY_PASSWORD);
-
-                edtEmail.setText(email);
-                edtPassword.setText(password);
-                loginAuthAccount(email, password);
+                checkAutoLogin(email, password);
             }
         };
-        registerBroadcast(mBroadcastDataSignUp, KEY_CREATE_ACCOUNT_DONE);
+        registerBroadcast(mBroadcastDataSignUp, KEY_AUTO_LOGIN);
     }
 
     @Override
@@ -150,6 +147,17 @@ public class SignInActivity extends BaseFragmentActivity {
         initView();
         btBottom.setText(getText(R.string.title_sign_up));
         Utils.setEnable(btnLogin, false);
+        boolean isNotShow = Utils.isNotWelcome(SignInActivity.this);
+        if (isNotShow) {
+            checkAutoLogin(Utils.getEmail(this), Utils.getPassword(this));
+        }
+    }
+
+    public void checkAutoLogin(String email, String password) {
+        edtEmail.setText(email);
+        edtPassword.setText(password);
+        Utils.setEnable(btnLogin, true);
+        loginAuthAccount(email, password);
     }
 
     @Override
@@ -255,18 +263,19 @@ public class SignInActivity extends BaseFragmentActivity {
         String mEmail, mPassword;
         mEmail = edtEmail.getText().toString();
         mPassword = edtPassword.getText().toString();
-        if (!Utils.isValidEmail(mEmail)) {
-            Utils.showAlertDialogOk(SignInActivity.this,
-                    getString(R.string.error_txt),
-                    getString(R.string.invalid_email_txt), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    });
-        } else {
-            loginAuthAccount(mEmail, mPassword);
-        }
+        loginAuthAccount(mEmail, mPassword);
+//        if (!Utils.isValidEmail(mEmail)) {
+//            Utils.showAlertDialogOk(SignInActivity.this,
+//                    getString(R.string.error_txt),
+//                    getString(R.string.invalid_email_txt), new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            dialogInterface.dismiss();
+//                        }
+//                    });
+//        } else {
+//
+//        }
         edtEmail.clearFocus();
         edtPassword.clearFocus();
     }
@@ -314,7 +323,21 @@ public class SignInActivity extends BaseFragmentActivity {
                 dismissProgressDialog();
                 if (response.code() == Constant.IS_SUCCESS) {
                     Utils.saveRememberAccount(SignInActivity.this, true, mail, password);
-                    Utils.showToast(SignInActivity.this, R.string.login_successfully, true);
+                    if (response.body().getAccount() != null) {
+                        Utils.setUid(Utils.cutSymb(response.body().getAccount().getUid()+""));
+                        Log.e("uid", Utils.getUid());
+                        Intent intent = new Intent(SignInActivity.this, MainToolbarActivity.class);
+                        startActivity(intent);
+                        Utils.showToast(SignInActivity.this, R.string.login_successfully, true);
+                    } else {
+                        Utils.showAlertDialogOk(SignInActivity.this, getString(R.string.error_txt),
+                                getString(R.string.server_error), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.dismiss();
+                                    }
+                                });
+                    }
                 } else {
                     Utils.handleErrorMessages(SignInActivity.this, response, R.string.unknown_account);
                 }

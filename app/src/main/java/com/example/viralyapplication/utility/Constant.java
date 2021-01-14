@@ -12,6 +12,7 @@ public class Constant {
     public static final int IS_UNAUTHORIZED = 401;
     public static final int IS_FORBIDDEN = 403;
     public static final String IS_OK = "ok";
+    public static final String TYPE_IMAGE = "image";
 
     //BroadCastKey
     public static final String KEY_CREATE_ACCOUNT = "key_create_account";

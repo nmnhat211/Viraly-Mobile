@@ -19,6 +19,7 @@
         tools:replace="android:allowBackup"
         tools:targetApi="m">
 
+        <activity android:name=".ui.activity.MainToolbarActivity"/>
         <activity android:name=".ui.activity.SignUpActivity"
             android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity

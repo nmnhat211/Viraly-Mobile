@@ -1,29 +1,27 @@
-package com.example.viralyapplication.repository.model;
+package com.example.viralyapplication.repository.model.newsfeed;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
-
-public class UserModel implements Serializable {
+public class UserModel {
     @SerializedName("is_banned")
     @Expose
     private Boolean isBanned;
     @SerializedName("verified")
     @Expose
     private Boolean verified;
-    @SerializedName("_id")
-    @Expose
-    private String id;
-    @SerializedName("email")
-    @Expose
-    private String email;
     @SerializedName("username")
     @Expose
     private String username;
+    @SerializedName("email")
+    @Expose
+    private String email;
     @SerializedName("display_name")
     @Expose
     private String displayName;
+    @SerializedName("avatar")
+    @Expose
+    private String avatar;
     @SerializedName("uid")
     @Expose
     private String uid;
@@ -36,9 +34,12 @@ public class UserModel implements Serializable {
     @SerializedName("__v")
     @Expose
     private Integer v;
-    @SerializedName("url")
+    @SerializedName("language")
     @Expose
-    private String url;
+    private String language;
+    @SerializedName("id")
+    @Expose
+    private String id;
 
     public Boolean getIsBanned() {
         return isBanned;
@@ -56,12 +57,12 @@ public class UserModel implements Serializable {
         this.verified = verified;
     }
 
-    public String getId() {
-        return id;
+    public String getUsername() {
+        return username;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -72,20 +73,20 @@ public class UserModel implements Serializable {
         this.email = email;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getDisplayName() {
         return displayName;
     }
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public String getUid() {
@@ -120,11 +121,19 @@ public class UserModel implements Serializable {
         this.v = v;
     }
 
-    public String getUrl() {
-        return url;
+    public String getLanguage() {
+        return language;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
