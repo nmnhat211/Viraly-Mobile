@@ -1,98 +1,135 @@
 package com.example.viralyapplication.adapter;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.viralyapplication.R;
 import com.example.viralyapplication.repository.model.newsfeed.ContentModel;
-import com.example.viralyapplication.repository.model.newsfeed.PostModel;
-import com.example.viralyapplication.utility.AdapterClickListener;
+import com.example.viralyapplication.repository.model.newsfeed.postItemModel;
 import com.example.viralyapplication.utility.Utils;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class AdapterNewsFeed extends RecyclerView.Adapter<AdapterNewsFeed.MyViewHolder> {
-    private ArrayList<PostModel> mArrayPostModel = new ArrayList<>();
+public class AdapterNewsFeed extends BaseAdapter {
+    private ArrayList<postItemModel> postItem;
     private Context mContext;
     private ContentModel ContentModel;
-    private AdapterClickListener listener;
+    private onClickPostListener mListener;
 
-    public AdapterNewsFeed(Context mContext, ArrayList<PostModel> mArrayPostModel, AdapterClickListener listener) {
-        this.mArrayPostModel = mArrayPostModel;
+
+
+    public AdapterNewsFeed(Context mContext, ArrayList<postItemModel> itemPost, onClickPostListener listener) {
+        this.postItem = itemPost;
         this.mContext = mContext;
+        this.mListener = listener;
     }
 
-    @NonNull
-    @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.include_row_newfeed_layout, parent, false);
-        MyViewHolder vh = new MyViewHolder(v);
-        return vh;
+    public void setCaptionPost(int position, String caption) {
+        postItem.get(position).setCaption(caption);
+        notifyDataSetChanged();
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        PostModel postModel = mArrayPostModel.get(position);
-        Utils.loadCircleView(mContext, postModel.getUser().getAvatar(), holder.ivAvatar, 5);
-        if (postModel.getContent() != null){
-            Utils.loadView(mContext, postModel.getContent().get(0).getUrl(), holder.ivUserPosted);
+    public void setStatusItem(int position, String url) {
+        for (ContentModel model : postItem.get(position).getContent()) {
+            model.setUrl(url);
+            notifyDataSetChanged();
         }
-        holder.tvNameUser.setText(postModel.getUser().getDisplayName());
-        holder.tvTimePost.setText(postModel.getCreatedAt());
-        holder.tvContentPost.setText(postModel.getCaption());
-        holder.tvTitleLikeNumber.setText(postModel.getLikes().size() +"");
-        holder.tvTitleCommentNumber.setText(postModel.getComments().size()+"");
     }
 
     @Override
-    public int getItemCount() {
-        return mArrayPostModel.size();
+    public int getCount() {
+        if (postItem != null)
+            return postItem.size();
+        return 0;
+    }
+
+    @Override
+    public postItemModel getItem(int position) {
+        if (position < postItem.size() && position > -1)
+            return postItem.get(position);
+        return new postItemModel();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View currentView, ViewGroup parent) {
+        Holder holder = null;
+        if (currentView == null) {
+            currentView = View.inflate(mContext, R.layout.include_row_newfeed_layout, null);
+            holder = new AdapterNewsFeed.Holder();
+            currentView.setTag(holder);
+        } else {
+            holder = (Holder) currentView.getTag();
+        }
+
+        postItemModel postItem = getItem(position);
+
+        holder.tvNameUser = currentView.findViewById(R.id.tv_name_user_new_feed);
+        holder.tvTimePost = currentView.findViewById(R.id.tv_time_posted);
+        holder.tvContentPost = currentView.findViewById(R.id.tv_content_post);
+
+        holder.tvTitleLikeNumber = currentView.findViewById(R.id.tv_number_like);
+        holder.tvTitleCommentNumber = currentView.findViewById(R.id.tv_number_comment);
+
+        holder.ivLikeAction = currentView.findViewById(R.id.iv_like_action);
+        holder.ivCommentAction = currentView.findViewById(R.id.iv_comment_action);
+        holder.ivOptional = currentView.findViewById(R.id.iv_optional);
+        holder.ivAvatar = currentView.findViewById(R.id.iv_avatar_user);
+        holder.ivUserPosted = currentView.findViewById(R.id.iv_image_user_posted);
+
+        holder.ivAvatarCommentUser = currentView.findViewById(R.id.iv_avatar_comment_user);
+        holder.edtCommentUser = currentView.findViewById(R.id.edt_status_user);
+        holder.rlSentComment = currentView.findViewById(R.id.rl_send_comment);
+        holder.mCstRoot = currentView.findViewById(R.id.cnts_root);
+
+
+        holder.tvNameUser.setText(postItem.getUser().getDisplayName());
+        holder.tvTimePost.setText(postItem.getCreatedAt());
+        holder.tvContentPost.setText(postItem.getCaption());
+        holder.tvTitleLikeNumber.setText(postItem.getLikes().size() + "");
+        holder.tvTitleCommentNumber.setText(postItem.getComments().size() + "");
+
+        holder.mCstRoot.setOnClickListener(v -> {
+            mListener.onItemPostClickListener(postItem, position);
+        });
+
+
+        Utils.loadCircleView(mContext, postItem.getUser().getAvatar(), holder.ivAvatar, 5);
+        if (postItem.getContent() != null) {
+            Utils.loadView(mContext, postItem.getContent().get(0).getUrl(), holder.ivUserPosted);
+        }
+
+        return currentView;
     }
 
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class Holder {
         TextView tvNameUser, tvTimePost, tvContentPost, tvTitleLikeNumber,
                 tvTitleCommentNumber;
         ImageView ivAvatar, ivUserPosted, ivAvatarCommentUser,
-                tvLikeAction, tvCommentAction, edtCommentUser, ivOptional ;
+                ivLikeAction, ivCommentAction, edtCommentUser, ivOptional;
         RelativeLayout rlSentComment;
+        ConstraintLayout mCstRoot;
 
-        public MyViewHolder(@NonNull View itemView) {
-            super(itemView);
-            tvNameUser = itemView.findViewById(R.id.tv_name_user_new_feed);
-            tvTimePost = itemView.findViewById(R.id.tv_time_posted);
-            tvContentPost = itemView.findViewById(R.id.tv_content_post);
-
-            tvTitleLikeNumber = itemView.findViewById(R.id.tv_number_like);
-            tvTitleCommentNumber = itemView.findViewById(R.id.tv_number_comment);
-            tvLikeAction = itemView.findViewById(R.id.iv_like_action);
-            tvCommentAction = itemView.findViewById(R.id.iv_comment_action);
-
-            ivOptional = itemView.findViewById(R.id.iv_optional);
-            ivAvatar = itemView.findViewById(R.id.iv_avatar_user);
-            ivUserPosted = itemView.findViewById(R.id.iv_image_user_posted);
-
-            ivAvatarCommentUser = itemView.findViewById(R.id.iv_avatar_comment_user);
-            edtCommentUser = itemView.findViewById(R.id.edt_status_user);
-            rlSentComment = itemView.findViewById(R.id.rl_send_comment);
-        }
     }
 
     public interface onClickPostListener {
-        void onItemPostClickListener(PostModel postModel);
+        void onItemPostClickListener(postItemModel itemPost, int position);
 
-        void onLikeClickListener(List<Object> likes);
+        void onLikeClickListener(postItemModel itemPost, int position);
 
-        void onCommentClickListener(List<Object> comment);
+        void onCommentClickListener(postItemModel itemPost, int position);
     }
 }
 

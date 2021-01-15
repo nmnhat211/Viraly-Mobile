@@ -1,5 +1,6 @@
 package com.example.viralyapplication.ui.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -9,21 +10,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.viralyapplication.R;
 import com.example.viralyapplication.adapter.AdapterNewsFeed;
 import com.example.viralyapplication.repository.api.NewsFeedApi;
 import com.example.viralyapplication.repository.model.getUserModel;
 import com.example.viralyapplication.repository.model.newsfeed.NewsFeedModel;
-import com.example.viralyapplication.repository.model.newsfeed.PostModel;
+import com.example.viralyapplication.repository.model.newsfeed.postItemModel;
 import com.example.viralyapplication.ui.activity.CreatePostActivity;
-import com.example.viralyapplication.utility.AdapterClickListener;
 import com.example.viralyapplication.utility.Constant;
-import com.example.viralyapplication.utility.DividerItemDecoration;
 import com.example.viralyapplication.utility.NetworkProfile;
 import com.example.viralyapplication.utility.Utils;
+import com.example.viralyapplication.utility.VerticalListView;
 
 import java.util.ArrayList;
 
@@ -31,17 +30,22 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NewsFeedFragment extends BaseFragment implements AdapterClickListener {
+public class NewsFeedFragment extends BaseFragment implements AdapterNewsFeed.onClickPostListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     public static final String KEY_USER_ID = "key_user_id";
     public static final String KEY_USER_DATA = "key_user_data";
     private String mParam1;
     private String mParam2;
-    private AdapterNewsFeed mAdapterNewsFeed;
-    private RecyclerView mRecyclerView;
-    private ArrayList<PostModel> mArrayModelPost;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    private AdapterNewsFeed mAdapter;
+    private VerticalListView mListView;
+    private ArrayList<postItemModel> mItemPost;
     private LinearLayout lnCreatePost;
+    private int mCurrentPosition = -1;
+    private postItemModel mPostItem;
+    private Context mContext;
 
     public NewsFeedFragment() {
     }
@@ -68,20 +72,32 @@ public class NewsFeedFragment extends BaseFragment implements AdapterClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_feed, container, false);
-        mRecyclerView = view.findViewById(R.id.rl_row_post);
-        mArrayModelPost = new ArrayList<>();
-        mAdapterNewsFeed = new AdapterNewsFeed(getContext(), mArrayModelPost, this);
-        mRecyclerView.setAdapter(mAdapterNewsFeed);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), null));
-        lnCreatePost = view.findViewById(R.id.lv_create_post);
-        lnCreatePost.setOnClickListener(this);
+        mContext = getActivity();
+        initView(view);
         getNewFeed();
         return view;
 
     }
 
-    public void getUser(){
+    private void initView(View view) {
+        mListView = view.findViewById(R.id.row_post);
+        mItemPost = new ArrayList<>();
+        mAdapter = new AdapterNewsFeed(getContext(), mItemPost, this);
+        mListView.setAdapter(mAdapter);
+        lnCreatePost = view.findViewById(R.id.lv_create_post);
+        lnCreatePost.setOnClickListener(this);
+        mSwipeRefreshLayout = view.findViewById(R.id.swipe_container);
+        mSwipeRefreshLayout.setColorScheme(R.color.color_main);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getNewFeed();
+            }
+        });
+
+    }
+
+    public void getUser() {
         showProgressDialog();
         NewsFeedApi api = NetworkProfile.getRetrofitInstance().create(NewsFeedApi.class);
         Call<getUserModel> call = api.getUser(Utils.getUid());
@@ -89,10 +105,10 @@ public class NewsFeedFragment extends BaseFragment implements AdapterClickListen
             @Override
             public void onResponse(Call<getUserModel> call, Response<getUserModel> response) {
                 dismissProgressDialog();
-                if (response.code() == Constant.IS_SUCCESS){
-                    if (response.body() != null){
+                if (response.code() == Constant.IS_SUCCESS) {
+                    if (response.body() != null) {
                     }
-                }else {
+                } else {
                     Utils.handleErrorMessages(getContext(), response, R.string.unknown_account);
                 }
             }
@@ -109,7 +125,7 @@ public class NewsFeedFragment extends BaseFragment implements AdapterClickListen
         });
     }
 
-    public void getNewFeed(){
+    public void getNewFeed() {
         showProgressDialog();
         NewsFeedApi api = NetworkProfile.getRetrofitInstance().create(NewsFeedApi.class);
         Call<NewsFeedModel> call = api.getNewsFeed();
@@ -117,19 +133,23 @@ public class NewsFeedFragment extends BaseFragment implements AdapterClickListen
             @Override
             public void onResponse(Call<NewsFeedModel> call, Response<NewsFeedModel> response) {
                 dismissProgressDialog();
-                if (response.code() == Constant.IS_SUCCESS){
-                    if (response.body().getPosts() != null){
-                        mArrayModelPost.addAll(response.body().getPosts());
-                        mAdapterNewsFeed.notifyDataSetChanged();
+                if (response.code() == Constant.IS_SUCCESS) {
+                    if (response.body().getPosts() != null) {
+                        mItemPost.clear();
+                        mItemPost.addAll(response.body().getPosts());
+                        mAdapter.notifyDataSetChanged();
+                        mListView.setSelectionAfterHeaderView();
                     }
-                }else {
+                } else {
                     Utils.handleErrorMessages(mContext, response, R.string.server_error);
                 }
+                refreshCompleted();
             }
 
             @Override
             public void onFailure(Call<NewsFeedModel> call, Throwable t) {
-            dismissProgressDialog();
+                dismissProgressDialog();
+                refreshCompleted();
                 Utils.showAlertDialogOk(getContext(),
                         getString(R.string.error_txt),
                         t.getMessage(),
@@ -143,14 +163,30 @@ public class NewsFeedFragment extends BaseFragment implements AdapterClickListen
     @Override
     public void onClick(View v) {
         super.onClick(v);
-        if (v.getId() == R.id.lv_create_post){
+        if (v.getId() == R.id.lv_create_post) {
             Intent intent = new Intent(getActivity(), CreatePostActivity.class);
             startActivity(intent);
         }
     }
 
     @Override
-    public void onItemClicked(int amount, ArrayList<PostModel> PostModel) {
+    public void onItemPostClickListener(postItemModel itemPost, int position) {
+        mCurrentPosition = position;
+    }
 
+    @Override
+    public void onLikeClickListener(postItemModel itemPost, int position) {
+        mCurrentPosition = position;
+    }
+
+    @Override
+    public void onCommentClickListener(postItemModel itemPost, int position) {
+        mCurrentPosition = position;
+    }
+
+    private void refreshCompleted() {
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 }

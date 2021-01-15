@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
-public class PostModel implements Serializable {
+public class postItemModel implements Serializable {
     @SerializedName("content")
     @Expose
     private List<ContentModel> content = null;

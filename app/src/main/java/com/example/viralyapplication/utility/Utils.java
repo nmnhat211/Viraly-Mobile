@@ -58,11 +58,12 @@ public class Utils {
     private static final int SHORT_DELAY = 2000;
     public static String uid= "";
 
+
+
     public static int getDefaultImage(){
         return R.drawable.avatar;
     }
-
-    public static int getDefaultLoadding(){
+    public static int getDefaultLoading(){
         return R.drawable.loading_rect_thumb;
     }
 

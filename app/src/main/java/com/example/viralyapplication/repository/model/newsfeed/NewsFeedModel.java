@@ -10,16 +10,16 @@ public class NewsFeedModel implements Serializable {
 
     @SerializedName("posts")
     @Expose
-    private List<PostModel> posts = null;
+    private List<postItemModel> posts = null;
     @SerializedName("status")
     @Expose
     private String status;
 
-    public List<PostModel> getPosts() {
+    public List<postItemModel> getPosts() {
         return posts;
     }
 
-    public void setPosts(List<PostModel> posts) {
+    public void setPosts(List<postItemModel> posts) {
         this.posts = posts;
     }
 
