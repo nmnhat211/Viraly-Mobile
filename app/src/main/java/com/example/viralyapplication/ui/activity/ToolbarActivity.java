@@ -11,14 +11,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import com.example.viralyapplication.R;
+import com.example.viralyapplication.utility.Utils;
 
 
-public class ToolbarActivity extends BaseFragmentActivity{
+public class ToolbarActivity extends BaseFragmentActivity {
 
     private static ToolbarActivity sInstance = null;
     protected Context mContext;
-    private TextView tvMainTitle;
-    private ImageView ivMainBack;
+    private TextView tvMainTitle, tvTitleRight;
+    private ImageView ivMainBack, ivHome;
 
     public void setContentView(int layoutResID) {
         DrawerLayout fullView = (DrawerLayout) getLayoutInflater().inflate(R.layout.activity_toolbar_layout, null);
@@ -87,9 +88,13 @@ public class ToolbarActivity extends BaseFragmentActivity{
 
     private void initView(){
         tvMainTitle = findViewById(R.id.main_title_toolbar);
+        tvTitleRight = findViewById(R.id.tv_title_right);
         ivMainBack = findViewById(R.id.iv_back_tool_bar);
-
+        ivHome = findViewById(R.id.iv_home);
+        ivHome.setOnClickListener(this);
         ivMainBack.setOnClickListener(this);
+        tvTitleRight.setOnClickListener(this);
+
     }
 
     protected void setDisplayTitle(boolean value){
@@ -100,6 +105,14 @@ public class ToolbarActivity extends BaseFragmentActivity{
         ivMainBack.setVisibility(value ? View.VISIBLE : View.GONE);
     }
 
+    protected void setDisplayTitleRight(boolean value){
+        tvTitleRight.setVisibility(value ? View.VISIBLE : View.GONE);
+    }
+
+    protected void setTitleRight(String title){
+        tvTitleRight.setText(title);
+    }
+
     protected void setTitleToolbar(String title){
         tvMainTitle.setText(title);
     }
@@ -107,14 +120,29 @@ public class ToolbarActivity extends BaseFragmentActivity{
     @Override
     public void onClick(View view) {
         super.onClick(view);
-        if (view.getId() == R.id.iv_back_tool_bar) {
-            finish();
+        switch (view.getId()){
+            case R.id.iv_back_tool_bar:
+                onBackPressed();
+                break;
+            case R.id.iv_home:
+                Utils.goToNewsFeedFragment();
+                break;
+            case R.id.tv_title_right:
+                onClickTitleRight();
+                break;
         }
+    }
+
+    protected void setDisplay(Boolean value){
+        ivHome.setVisibility(value ? View.VISIBLE : View.GONE);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    public void onClickTitleRight() {
     }
 }
 

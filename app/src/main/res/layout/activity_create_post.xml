@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/ctrs_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp15"
+        android:layout_marginRight="@dimen/dp15"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/tv_content_post"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ctrs_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_avatar_user"
+                android:layout_width="@dimen/dp60"
+                android:layout_height="@dimen/dp60"
+                android:scaleType="centerCrop"
+                android:src="@drawable/avatar"
+                app:civ_border_color="@color/colorWhite"
+                app:civ_border_width="@dimen/dp1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:layout_width="@dimen/dp15"
+                android:layout_height="@dimen/dp15"
+                android:layout_marginLeft="@dimen/dp20"
+                android:background="@drawable/bg_green_oval"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_avatar_user"
+                app:layout_constraintRight_toRightOf="@id/iv_avatar_user" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <me.grantland.widget.AutofitTextView
+            android:id="@+id/tv_name_user_new_feed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp15"
+            android:ellipsize="end"
+            android:fontFamily="@font/gilroy_bold"
+            android:text="username"
+            android:textColor="@color/color_main"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:minTextSize="10sp" />
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/edt_content_post"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp15"
+        android:layout_marginTop="@dimen/dp15"
+        android:layout_marginRight="@dimen/dp15"
+        android:fontFamily="@font/gilroy_medium"
+        android:inputType="textMultiLine"
+        android:padding="@dimen/dp15"
+        android:textColor="@color/colorGrey"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/ctrs_image"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ctrs_top" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ctrs_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp15"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edt_content_post">
+
+        <ImageView
+            android:id="@+id/iv_image_user_posted"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/dp350"
+            android:background="@drawable/binz"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/ln_option_func"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp10"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ctrs_image">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_func_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_camera"
+                android:backgroundTint="@color/colorGrey" />
+
+            <ImageView
+                android:id="@+id/iv_func_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/dp10"
+                android:layout_marginLeft="@dimen/dp10"
+                android:background="@drawable/ic_video"
+                android:backgroundTint="@color/colorGrey" />
+
+            <ImageView
+                android:id="@+id/iv_func_animations"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/dp10"
+                android:layout_marginLeft="@dimen/dp10"
+                android:background="@drawable/ic_animations"
+                android:backgroundTint="@color/colorGrey" />
+
+            <ImageView
+                android:id="@+id/iv_func_collections"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp10"
+                android:background="@drawable/ic_collections"
+                android:backgroundTint="@color/colorGrey" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

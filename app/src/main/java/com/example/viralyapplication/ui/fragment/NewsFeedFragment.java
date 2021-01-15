@@ -1,11 +1,13 @@
 package com.example.viralyapplication.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +18,7 @@ import com.example.viralyapplication.repository.api.NewsFeedApi;
 import com.example.viralyapplication.repository.model.getUserModel;
 import com.example.viralyapplication.repository.model.newsfeed.NewsFeedModel;
 import com.example.viralyapplication.repository.model.newsfeed.PostModel;
+import com.example.viralyapplication.ui.activity.CreatePostActivity;
 import com.example.viralyapplication.utility.AdapterClickListener;
 import com.example.viralyapplication.utility.Constant;
 import com.example.viralyapplication.utility.DividerItemDecoration;
@@ -38,6 +41,7 @@ public class NewsFeedFragment extends BaseFragment implements AdapterClickListen
     private AdapterNewsFeed mAdapterNewsFeed;
     private RecyclerView mRecyclerView;
     private ArrayList<PostModel> mArrayModelPost;
+    private LinearLayout lnCreatePost;
 
     public NewsFeedFragment() {
     }
@@ -70,7 +74,8 @@ public class NewsFeedFragment extends BaseFragment implements AdapterClickListen
         mRecyclerView.setAdapter(mAdapterNewsFeed);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), null));
-
+        lnCreatePost = view.findViewById(R.id.lv_create_post);
+        lnCreatePost.setOnClickListener(this);
         getNewFeed();
         return view;
 
@@ -116,7 +121,6 @@ public class NewsFeedFragment extends BaseFragment implements AdapterClickListen
                     if (response.body().getPosts() != null){
                         mArrayModelPost.addAll(response.body().getPosts());
                         mAdapterNewsFeed.notifyDataSetChanged();
-                        Log.e("aaaaaaaaaaaaaaaaaaaaaaa", "a");
                     }
                 }else {
                     Utils.handleErrorMessages(mContext, response, R.string.server_error);
@@ -134,6 +138,15 @@ public class NewsFeedFragment extends BaseFragment implements AdapterClickListen
             }
         });
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+        if (v.getId() == R.id.lv_create_post){
+            Intent intent = new Intent(getActivity(), CreatePostActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override

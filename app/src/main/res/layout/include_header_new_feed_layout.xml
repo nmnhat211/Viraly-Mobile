@@ -16,6 +16,7 @@
         android:padding="@dimen/dp20">
 
         <LinearLayout
+            android:id="@+id/lv_create_post"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_gray_white_bttuon_r30"
@@ -120,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp10"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -171,6 +172,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
+                    android:visibility="gone"
                     android:layout_marginTop="@dimen/dp10"
                     android:orientation="horizontal">
 

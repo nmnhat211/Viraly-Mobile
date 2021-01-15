@@ -7,11 +7,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -107,6 +110,11 @@ public class Utils {
         Intent intent = new Intent(context, SignInActivity.class);
         intent.putExtra(NewsFeedFragment.KEY_USER_DATA, data);
         context.startActivity(intent);
+    }
+
+    public static void goToNewsFeedFragment(){
+        Intent intent = new Intent(MyApplication.instance, NewsFeedFragment.class);
+        MyApplication.instance.startActivity(intent);
     }
 
     public static void setTextViewDrawableColor(TextView textView, int color) {
@@ -340,6 +348,13 @@ public class Utils {
 
     }
 
+    public static String changeNamePathImage(String namePath) {
+        String[] arrNameFile = namePath.split("\\.");
+        namePath = arrNameFile[0] + System.currentTimeMillis() + "." + arrNameFile[1];
+        return namePath;
+    }
+
+
 //    public static List<String> getContent(List<String> content){
 //            List<String> url;
 //            for (int i, i < content.size()){
@@ -347,4 +362,17 @@ public class Utils {
 //            }
 //            return content;
 //    }
+
+
+    public static String getRealPathFromURI(Uri contentUri) {
+        String path = null;
+        String[] proj = {MediaStore.MediaColumns.DATA};
+        Cursor cursor = mContext.getContentResolver().query(contentUri, proj, null, null, null);
+        if (cursor.moveToFirst()) {
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+            path = cursor.getString(column_index);
+        }
+        cursor.close();
+        return path;
+    }
 }

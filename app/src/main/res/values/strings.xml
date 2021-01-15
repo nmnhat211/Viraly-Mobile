@@ -43,7 +43,7 @@
     <string name="my_setting">My Setting</string>
     <string name="log_out">Log Out</string>
 
-<!--text content-->
+    <!--text content-->
     <string name="news_feed_text">News Feed</string>
     <string name="notification_text">Notification</string>
     <string name="setting_text">Setting</string>
@@ -88,7 +88,10 @@
     <string name="invalid_email_txt">Your email is invalid, please enter again!</string>
     <string name="infor_txt">Infor</string>
     <string name="infor1_txt"></string>
-    <string name="search_txt">Search</string>
+    <string name="take">Search</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="choose_from_gallery">Choose from Gallery</string>
+    <string name="permission_denied">Please grant permission to upload photo</string>
 
 
 </resources>

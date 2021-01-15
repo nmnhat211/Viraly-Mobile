@@ -45,10 +45,10 @@
                         android:visibility="gone" />
 
                     <ImageView
-                        android:id="@+id/iv_menu_bar"
+                        android:id="@+id/iv_home"
                         android:layout_width="@dimen/dp50"
                         android:layout_height="@dimen/dp50"
-                        android:background="@drawable/ic_action_menu"
+                        android:background="@drawable/ic_action_home"
                         android:backgroundTint="@color/colorWhite"
                         android:visibility="gone" />
                 </RelativeLayout>
@@ -64,6 +64,7 @@
                     android:paddingLeft="@dimen/dp50"
                     android:paddingRight="@dimen/dp50"
                     android:singleLine="true"
+                    android:textSize="@dimen/dp20"
                     android:textColor="@color/colorWhite"
                     android:visibility="gone"
                     app:minTextSize="18sp" />
@@ -82,6 +83,16 @@
                         android:background="@drawable/ic_action_search"
                         android:backgroundTint="@color/colorWhite"
                         android:visibility="gone" />
+                    <TextView
+                        android:id="@+id/tv_title_right"
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/colorWhite"
+                        android:fontFamily="@font/gilroy_heavy"
+                        android:textSize="18sp"
+                        android:visibility="gone"
+                        android:textAllCaps="true"
+                        android:text="@string/post_text"
+                        android:layout_height="wrap_content"/>
 
                 </RelativeLayout>
             </RelativeLayout>

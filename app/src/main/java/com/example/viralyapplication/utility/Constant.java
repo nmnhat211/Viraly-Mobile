@@ -22,4 +22,6 @@ public class Constant {
     public static final String KEY_REMEMBER_ME = "key_remember_me";
     public static final String KEY_PASSWORD = "key_password";
     public static final String KEY_USERNAME = "key_username";
+    public static String IMAGE = "image";
+
 }

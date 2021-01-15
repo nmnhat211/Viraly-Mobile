@@ -4,7 +4,11 @@
     package="com.example.viralyapplication">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
 
     <application
         android:allowBackup="false"
@@ -16,12 +20,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppThemeToolbar"
         android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true"
         tools:replace="android:allowBackup"
-        tools:targetApi="m">
-
-        <activity android:name=".ui.activity.MainToolbarActivity"/>
-        <activity android:name=".ui.activity.SignUpActivity"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
+        tools:targetApi="q">
+        <activity android:name=".ui.activity.CreatePostActivity"></activity>
+        <activity android:name=".ui.activity.MainToolbarActivity" />
+        <activity
+            android:name=".ui.activity.SignUpActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".ui.activity.SignInActivity"
             android:windowSoftInputMode="adjustResize" />

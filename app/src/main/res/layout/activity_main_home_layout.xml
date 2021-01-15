@@ -69,6 +69,7 @@
                     android:paddingLeft="@dimen/dp50"
                     android:paddingRight="@dimen/dp50"
                     android:singleLine="true"
+                    android:fontFamily="@font/gilroy_heavy"
                     android:textColor="@color/colorWhite"
                     android:textSize="20sp"
                     android:visibility="gone"
