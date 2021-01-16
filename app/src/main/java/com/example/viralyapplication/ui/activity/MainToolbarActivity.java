@@ -26,7 +26,7 @@ public class MainToolbarActivity extends BaseFragmentActivity {
     private static MainToolbarActivity sInstance = null;
     protected Context mContext;
     private TextView tvMainTitle;
-    private ImageView ivActionBack, ivActionSearch, ivActionMenuBar;
+    private ImageView ivActionBack, ivActionSearch, ivActionMenuBar, ivLogoApp, ivActionHome;
     private ViewPager mViewPager;
     private BottomNavigationView mBottomNavigationView;
 
@@ -90,6 +90,8 @@ public class MainToolbarActivity extends BaseFragmentActivity {
         ivActionBack = findViewById(R.id.iv_back_tool_bar);
         ivActionSearch = findViewById(R.id.iv_search_tool_bar);
         ivActionMenuBar = findViewById(R.id.iv_menu_bar);
+        ivActionHome = findViewById(R.id.iv_home_tool_bar);
+        ivLogoApp = findViewById(R.id.iv_logo_app);
 
         mBottomNavigationView = findViewById(R.id.bottom_navigation);
         mViewPager = findViewById(R.id.vp_adapter_main_home);
@@ -97,8 +99,9 @@ public class MainToolbarActivity extends BaseFragmentActivity {
         ivActionBack.setOnClickListener(this);
         ivActionSearch.setOnClickListener(this);
         ivActionMenuBar.setOnClickListener(this);
+
         setDisplayTitle(true);
-        setTitleBar(getString(R.string.my_profile));
+        setTitleBar(getString(R.string.home));
         setViewPager();
         setViewBottomNavigation();
     }
@@ -120,6 +123,10 @@ public class MainToolbarActivity extends BaseFragmentActivity {
         }
     }
 
+    protected void setDisplayTitle(boolean value) {
+        tvMainTitle.setVisibility(value ? View.VISIBLE : View.GONE);
+    }
+
     protected void setTitleBar(String title) {
         if (TextUtils.isEmpty(title)) {
             setDisplayTitle(false);
@@ -129,6 +136,13 @@ public class MainToolbarActivity extends BaseFragmentActivity {
         }
     }
 
+    protected void setDisplayLogo(boolean value){
+        ivLogoApp.setVisibility(value ? View.VISIBLE : View.GONE);
+    }
+
+    protected void setDisplayHome(boolean value){
+        ivActionHome.setVisibility(value ? View.VISIBLE : View.GONE);
+    }
 
     protected void setDisplayMenu(boolean value) {
         ivActionMenuBar.setVisibility(value ? View.VISIBLE : View.GONE);
@@ -199,9 +213,7 @@ public class MainToolbarActivity extends BaseFragmentActivity {
         fm.popBackStack();
     }
 
-    protected void setDisplayTitle(boolean value) {
-        tvMainTitle.setVisibility(value ? View.VISIBLE : View.GONE);
-    }
+
 
     private void setViewBottomNavigation(){
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -244,21 +256,25 @@ public class MainToolbarActivity extends BaseFragmentActivity {
                     case 0:
                         mBottomNavigationView.getMenu().findItem(R.id.nav_newsfeed).setCheckable(true);
                         setDisplayTitle(true);
-                        setTitleBar(getString(R.string.news_feed_text));
+                        setDisplayHome(true);
+                        setTitleBar(getString(R.string.home));
                         break;
                     case 1:
                         mBottomNavigationView.getMenu().findItem(R.id.nav_profile).setCheckable(true);
                         setDisplayTitle(true);
+                        setDisplayHome(true);
                         setTitleBar(getString(R.string.my_profile));
                         break;
                     case 2:
                         mBottomNavigationView.getMenu().findItem(R.id.nav_notify).setCheckable(true);
                         setDisplayTitle(true);
+                        setDisplayHome(true);
                         setTitleBar(getString(R.string.notification_text));
                         break;
                     case 3:
                         mBottomNavigationView.getMenu().findItem(R.id.nav_menu_search).setCheckable(true);
                         setDisplayTitle(true);
+                        setDisplayHome(true);
                         setTitleBar(getString(R.string.search_text1));
                         break;
                 }

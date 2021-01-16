@@ -87,7 +87,7 @@
                         android:id="@+id/tv_title_right"
                         android:layout_width="wrap_content"
                         android:textColor="@color/colorWhite"
-                        android:fontFamily="@font/gilroy_heavy"
+                        android:fontFamily="@font/gilroy_medium"
                         android:textSize="18sp"
                         android:visibility="gone"
                         android:textAllCaps="true"

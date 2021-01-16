@@ -51,7 +51,6 @@ import retrofit2.Response;
 
 public class Utils {
     public static MyApplication mContext = MyApplication.instance;
-    private DialogListener mDialogListener;
     public static String mUsername = "";
     public static String mPassword = "";
     private static final int LONG_DELAY = 3500; // 3.5 seconds
@@ -150,7 +149,7 @@ public class Utils {
         Date date;
 
         SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        SimpleDateFormat output = new SimpleDateFormat("MM/dd/yyyy");
+        SimpleDateFormat output = new SimpleDateFormat("EEE, dd/MM/yyyy");
         try {
             date = input.parse(content);
             covertDate = output.format(date);
@@ -177,8 +176,7 @@ public class Utils {
         return pat.matcher(email).matches();
     }
 
-    public void deleteAlert(Context context, String message, String title, int position, String id, DialogListener dialogListener) {
-        mDialogListener = dialogListener;
+    public static void deleteAlert(Context context, String message, String title) {
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_layout);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -189,7 +187,7 @@ public class Utils {
         btnPositive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mDialogListener.onAcceptClickListener(dialog, position, id);
+                Utils.showToast(context, R.string.delete_successfully, true);
             }
         });
         tvCancel.setOnClickListener(new View.OnClickListener() {
@@ -220,6 +218,12 @@ public class Utils {
                 // A null listener allows the button to dismiss the dialog and take no further action.
                 .setNegativeButton(android.R.string.no, null)
                 .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    public static void showAlertDialog(Context context) {
+        new AlertDialog.Builder(context)
+                .setView(R.layout.dialog_layout)
                 .show();
     }
 
@@ -376,4 +380,6 @@ public class Utils {
         cursor.close();
         return path;
     }
+
+
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="false">
@@ -8,16 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <include
-            android:id="@+id/include_top"
-            android:layout_alignParentTop="true"
-            layout="@layout/include_header_new_feed_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_container"
-            android:layout_below="@+id/include_top"
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
@@ -27,6 +19,7 @@
                 android:layout_height="match_parent"
                 android:background="@color/colorWhite"
                 android:fillViewport="true"
+                android:divider="@drawable/line_drawable1"
                 android:footerDividersEnabled="false"
                 android:scrollbars="vertical"/>
 
@@ -35,4 +28,4 @@
     </RelativeLayout>
 
 
-</ScrollView>
+</RelativeLayout>

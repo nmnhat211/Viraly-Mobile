@@ -2,9 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_white_button_r30"
-    android:orientation="vertical"
-    android:padding="@dimen/dp30">
+    android:background="@color/colorGrey1"
+    android:paddingTop="@dimen/dp10"
+    android:paddingLeft="@dimen/dp10"
+    android:paddingRight="@dimen/dp10"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tv_title_dialog"
@@ -19,6 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp10"
+        android:fontFamily="@font/gilroy_medium"
         android:text="@string/delete_post_text"
         android:textSize="20sp" />
 

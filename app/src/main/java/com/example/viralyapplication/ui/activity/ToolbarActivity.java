@@ -133,7 +133,7 @@ public class ToolbarActivity extends BaseFragmentActivity {
         }
     }
 
-    protected void setDisplay(Boolean value){
+    protected void setDisplayHome(Boolean value){
         ivHome.setVisibility(value ? View.VISIBLE : View.GONE);
     }
 

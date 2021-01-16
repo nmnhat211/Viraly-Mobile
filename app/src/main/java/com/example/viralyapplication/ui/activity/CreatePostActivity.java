@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
 import com.example.viralyapplication.R;
@@ -28,12 +30,12 @@ import com.example.viralyapplication.repository.model.CreatePostModel;
 import com.example.viralyapplication.utility.BitmapToFile;
 import com.example.viralyapplication.utility.Constant;
 import com.example.viralyapplication.utility.NetworkProfile;
+import com.example.viralyapplication.utility.ReadPathUtil;
 import com.example.viralyapplication.utility.Utils;
 
 import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -42,14 +44,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+
 public class CreatePostActivity extends ToolbarActivity {
     ImageView ivAvatarUser, ivUserPost, ivCamera;
     TextView tvNameUser;
     EditText edtContent;
     private Uri mImageUri;
-    private int mRequestCodeImage = 111;
-    private NewsFeedApi mApi;
-    private String mRealPath = "";
+    private ConstraintLayout cntrs;
 
     int isPicked;
 
@@ -71,8 +72,8 @@ public class CreatePostActivity extends ToolbarActivity {
         ivCamera = findViewById(R.id.iv_func_camera);
         ivUserPost = findViewById(R.id.iv_image_user_posted);
         tvNameUser = findViewById(R.id.tv_name_user_new_feed);
-        edtContent = findViewById(R.id.edt_content_post);
-
+        edtContent = findViewById(R.id.edt_status_user);
+        cntrs = findViewById(R.id.ctrs_image);
         ivCamera.setOnClickListener(this);
     }
 
@@ -82,88 +83,130 @@ public class CreatePostActivity extends ToolbarActivity {
         switch (view.getId()) {
             case R.id.iv_func_camera:
                 selectImage(CreatePostActivity.this);
+                cntrs.setVisibility(View.VISIBLE);
+                break;
         }
     }
 
 
     private void selectImage(Context context) {
-        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, mRequestCodeImage);
-//        ActivityCompat.requestPermissions(CreatePostActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, mRequestCodeImage);
+        final CharSequence[] options = {getResources().getString(R.string.take_photo), getResources().getString(R.string.choose_from_gallery)};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (options[item].equals("Take Photo")) {
+                    ActivityCompat.requestPermissions(CreatePostActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                    Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(takePicture, 0);
+                } else {
+                    isPicked = 0;
+                    ActivityCompat.requestPermissions(CreatePostActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                }
+            }
+        });
+        builder.show();
     }
 
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == mRequestCodeImage && resultCode == RESULT_OK && data != null) {
-            Uri uri = data.getData();
-            ivUserPost.setImageURI(uri);
-            mRealPath = getRealPathFromURI(uri);
+        String requiredPermission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+        int checkVal = checkCallingOrSelfPermission(requiredPermission);
+        if (checkVal != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(CreatePostActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         } else {
-            Log.e("onActivityResult: ", "Failed");
+            if (requestCode == 0 && resultCode == RESULT_OK && data != null) {
+                Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
+                ivUserPost.setImageBitmap(selectedImage);
+                mImageUri = BitmapToFile.getInstance().getImageUri(CreatePostActivity.this, selectedImage);
+                isPicked = 1;
+            }
         }
-        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+            mImageUri = data.getData();
+            ivUserPost.setImageURI(mImageUri);
+        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case 111: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(intent, mRequestCodeImage);
+            case 1: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && isPicked == 0) {
+                    Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(pickPhoto, 1);
+                } else if (isPicked == 1) {
+
                 } else {
-                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getResources().getString(R.string.permission_denied), Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
+    }
+
+
+    private void postImage() {
+        showProgressDialog();
+        NewsFeedApi mApi = NetworkProfile.getRetrofitInstance().create(NewsFeedApi.class);
+        File file = new File(ReadPathUtil.getPath(CreatePostActivity.this, mImageUri));
+        RequestBody requestFile =  RequestBody.create(MediaType.parse(getContentResolver().getType(mImageUri)), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData(Constant.IMAGE, file.getName(), requestFile);
+        Call<CreatePostModel> call = mApi.uploadFile(body);
+        call.enqueue(new Callback<CreatePostModel>() {
+            @Override
+            public void onResponse(Call<CreatePostModel> call, Response<CreatePostModel> response) {
+                dismissProgressDialog();
+                if (response.code() == Constant.IS_SUCCESS){
+                    Log.e(TAG, "onResponse: ");
+                }else {
+                    Log.e(TAG, response.code() + "");
                 }
             }
 
-        }
+            @Override
+            public void onFailure(Call<CreatePostModel> call, Throwable t) {
+                dismissProgressDialog();
+                Log.e("onFailure ", "" + t.getMessage());
+            }
+        });
+
     }
 
-    private void postImage() {
-            showProgressDialog();
-            mApi = NetworkProfile.getRetrofitInstance().create(NewsFeedApi.class);
-            Call<CreatePostModel> call;
-            File mFile = new File(mRealPath);
-            Utils.changeNamePathImage(mRealPath);
-            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), mFile);
-            MultipartBody.Part body = MultipartBody.Part.createFormData("image", mRealPath, requestBody);
-            call = mApi.uploadFile(body);
-            call.enqueue(new Callback<CreatePostModel>() {
-                @Override
-                public void onResponse(Call<CreatePostModel> call, Response<CreatePostModel> response) {
-                    dismissProgressDialog();
-                    if (response.code() == Constant.IS_SUCCESS) {
-                        Toast.makeText(CreatePostActivity.this, "right", Toast.LENGTH_SHORT).show();
-                        Log.e("url", response.body().getUrl());
-                    } else {
-                        Toast.makeText(CreatePostActivity.this, "faile", Toast.LENGTH_SHORT).show();
-                        Log.e("status", response.code() + "");
-                    }
-                }
+//    private void createPostuser(String caption, String url){
+//        showProgressDialog();
+//        NewsFeedApi mApi = NetworkProfile.getRetrofitInstance().create(NewsFeedApi.class);
+//        Map<String, String> requestBody =  new HashMap<>();
+//        mApi.createPost(caption, requestBody).enqueue(new Callback<Void>() {
+//            @Override
+//            public void onResponse(Call<Void> call, Response<Void> response) {
+//                if (response.code() == Constant.IS_SUCCESS){
+//                    Log.e("aaa", "aaa");
+//                }else {
+//                    Log.e("fail", response.message());
+//                }
+//            }
+//            @Override
+//            public void onFailure(Call<Void> call, Throwable t) {
+//                Utils.showAlertDialogOk(CreatePostActivity.this, getString(R.string.error_txt), t.getMessage(), new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        dialogInterface.dismiss();
+//                    }
+//                });
+//            }
+//        });
+//    }
 
-                @Override
-                public void onFailure(Call<CreatePostModel> call, Throwable t) {
-                    dismissProgressDialog();
-                    Log.e("onFailure", t.getMessage());
-                }
-            });
-        }
 
     private void createPost() {
-            postImage();
-    }
-
-    public String getRealPathFromURI(Uri contentUri) {
-        String path = null;
-        String[] proj = {MediaStore.MediaColumns.DATA};
-        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
-        if (cursor.moveToFirst()) {
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-            path = cursor.getString(column_index);
-        }
-        cursor.close();
-        return path;
+        String content = edtContent.getText().toString().trim();
+//        createPostuser(content, "");
     }
 
 
@@ -173,18 +216,4 @@ public class CreatePostActivity extends ToolbarActivity {
         createPost();
     }
 
-    public static String convertDate(String content) {
-        String covertDate = "";
-        Date date;
-
-        SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        SimpleDateFormat output = new SimpleDateFormat("MM/dd/yyyy");
-        try {
-            date = input.parse(content);
-            covertDate = output.format(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return covertDate;
-    }
 }

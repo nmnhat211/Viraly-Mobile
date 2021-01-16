@@ -17,7 +17,7 @@ import com.example.viralyapplication.utility.Utils;
 
 import java.util.ArrayList;
 
-public class AdapterNewsFeed extends BaseAdapter {
+public class NewsFeedAdapter extends BaseAdapter {
     private ArrayList<postItemModel> postItem;
     private Context mContext;
     private ContentModel ContentModel;
@@ -25,7 +25,7 @@ public class AdapterNewsFeed extends BaseAdapter {
 
 
 
-    public AdapterNewsFeed(Context mContext, ArrayList<postItemModel> itemPost, onClickPostListener listener) {
+    public NewsFeedAdapter(Context mContext, ArrayList<postItemModel> itemPost, onClickPostListener listener) {
         this.postItem = itemPost;
         this.mContext = mContext;
         this.mListener = listener;
@@ -42,6 +42,7 @@ public class AdapterNewsFeed extends BaseAdapter {
             notifyDataSetChanged();
         }
     }
+
 
     @Override
     public int getCount() {
@@ -67,7 +68,7 @@ public class AdapterNewsFeed extends BaseAdapter {
         Holder holder = null;
         if (currentView == null) {
             currentView = View.inflate(mContext, R.layout.include_row_newfeed_layout, null);
-            holder = new AdapterNewsFeed.Holder();
+            holder = new NewsFeedAdapter.Holder();
             currentView.setTag(holder);
         } else {
             holder = (Holder) currentView.getTag();
@@ -95,13 +96,24 @@ public class AdapterNewsFeed extends BaseAdapter {
 
 
         holder.tvNameUser.setText(postItem.getUser().getDisplayName());
-        holder.tvTimePost.setText(postItem.getCreatedAt());
+        holder.tvTimePost.setText(Utils.convertDate(postItem.getCreatedAt()));
         holder.tvContentPost.setText(postItem.getCaption());
-        holder.tvTitleLikeNumber.setText(postItem.getLikes().size() + "");
+        holder.tvTitleLikeNumber.setText(postItem.getLikes().size() + 1 +"");
         holder.tvTitleCommentNumber.setText(postItem.getComments().size() + "");
 
         holder.mCstRoot.setOnClickListener(v -> {
             mListener.onItemPostClickListener(postItem, position);
+        });
+
+        holder.ivOptional.setOnClickListener(v ->{
+            mListener.onClickOptionListener(postItem, position);
+        });
+
+        Holder finalHolder = holder;
+        holder.ivLikeAction.setOnClickListener(v ->{
+            mListener.onLikeClickListener(postItem, position);
+            finalHolder.ivLikeAction.setBackground(mContext.getDrawable(R.drawable.ic_heart));
+            finalHolder.tvTitleLikeNumber.setText(postItem.getLikes().size() + 1 +"");
         });
 
 
@@ -125,11 +137,15 @@ public class AdapterNewsFeed extends BaseAdapter {
     }
 
     public interface onClickPostListener {
+
         void onItemPostClickListener(postItemModel itemPost, int position);
 
         void onLikeClickListener(postItemModel itemPost, int position);
 
         void onCommentClickListener(postItemModel itemPost, int position);
+
+        void onClickOptionListener(postItemModel itemPost, int position);
     }
+
 }
 

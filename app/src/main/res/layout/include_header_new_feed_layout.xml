@@ -2,26 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp300"
-        android:background="@color/color_main" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/dp20">
+    android:layout_height="wrap_content"
+    android:background="@color/colorWhite">
 
         <LinearLayout
             android:id="@+id/lv_create_post"
             android:layout_width="match_parent"
+            android:padding="@dimen/dp15"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_gray_white_bttuon_r30"
-            android:orientation="vertical"
-            android:padding="@dimen/dp20">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -32,7 +22,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/dp15"
                     android:layout_marginEnd="@dimen/dp15">
 
                     <de.hdodenhof.circleimageview.CircleImageView
@@ -41,12 +30,12 @@
                         android:layout_height="@dimen/dp60"
                         android:scaleType="centerCrop"
                         android:src="@drawable/avatar"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:civ_border_color="@color/colorWhite"
+                        app:civ_border_width="@dimen/dp1"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:civ_border_color="@color/colorWhite"
-                        app:civ_border_width="@dimen/dp1" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
                         android:layout_width="@dimen/dp15"
@@ -68,10 +57,10 @@
                     <TextView
                         android:id="@+id/tv_name_user_new_feed"
                         android:layout_width="wrap_content"
-                        android:text="nmnhat211"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/gilroy_bold"
                         android:maxLines="2"
+                        android:text="nmnhat211"
                         android:textColor="@color/color_main"
                         android:textSize="20sp" />
 
@@ -86,28 +75,28 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp20"
                 android:background="@color/color_background1"
+                android:fontFamily="@font/gilroy_medium"
                 android:gravity="top"
                 android:hint="@string/status_hint_text"
                 android:imeOptions="actionDone"
                 android:inputType="textMultiLine"
                 android:minHeight="@dimen/dp100"
                 android:padding="@dimen/dp10"
-                android:fontFamily="@font/gilroy_medium"
                 android:textColor="@color/colorGrey"
                 android:textSize="20sp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_marginTop="@dimen/dp20">
+                android:layout_marginTop="@dimen/dp20"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/iv_image_user_posted"
                     android:layout_width="fill_parent"
                     android:layout_height="@dimen/dp350"
-                    android:scaleType="centerCrop"
                     android:background="@drawable/binz"
+                    android:scaleType="centerCrop"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -135,7 +124,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:background="@drawable/ic_camera"
-                        android:backgroundTint="@color/colorGrey" />
+                        android:backgroundTint="@color/color_main" />
 
                     <ImageView
                         android:id="@+id/iv_func_video"
@@ -145,7 +134,7 @@
                         android:layout_marginStart="@dimen/dp10"
                         android:layout_marginLeft="@dimen/dp10"
                         android:background="@drawable/ic_video"
-                        android:backgroundTint="@color/colorGrey" />
+                        android:backgroundTint="@color/color_main" />
 
                     <ImageView
                         android:id="@+id/iv_func_animations"
@@ -155,7 +144,7 @@
                         android:layout_marginStart="@dimen/dp10"
                         android:layout_marginLeft="@dimen/dp10"
                         android:background="@drawable/ic_animations"
-                        android:backgroundTint="@color/colorGrey" />
+                        android:backgroundTint="@color/color_main" />
 
                     <ImageView
                         android:id="@+id/iv_func_collections"
@@ -164,7 +153,7 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/dp10"
                         android:background="@drawable/ic_collections"
-                        android:backgroundTint="@color/colorGrey" />
+                        android:backgroundTint="@color/color_main" />
 
                 </LinearLayout>
 
@@ -172,9 +161,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:visibility="gone"
                     android:layout_marginTop="@dimen/dp10"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/tv_cancel"
@@ -205,6 +194,11 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+    <View
+        android:layout_below="@+id/lv_create_post"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/dp15"
+        android:background="@drawable/line_drawable1"
+        android:layout_height="@dimen/dp8"/>
 
 </RelativeLayout>

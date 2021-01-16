@@ -7,6 +7,7 @@
     <LinearLayout
         android:id="@+id/ctrs_top"
         android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/dp15"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp15"
         android:layout_marginRight="@dimen/dp15"
@@ -64,31 +65,36 @@
     </LinearLayout>
 
     <EditText
-        android:id="@+id/edt_content_post"
+        android:id="@+id/edt_status_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp15"
-        android:layout_marginTop="@dimen/dp15"
-        android:layout_marginRight="@dimen/dp15"
-        android:fontFamily="@font/gilroy_medium"
+        android:layout_marginTop="@dimen/dp20"
+        android:background="@color/color_background1"
+        android:gravity="top"
+        android:hint="@string/status_hint_text"
+        android:imeOptions="actionDone"
         android:inputType="textMultiLine"
-        android:padding="@dimen/dp15"
+        android:minHeight="@dimen/dp100"
+        android:padding="@dimen/dp10"
+        android:fontFamily="@font/gilroy_medium"
         android:textColor="@color/colorGrey"
         android:textSize="20sp"
+        android:layout_marginLeft="@dimen/dp15"
+        android:layout_marginRight="@dimen/dp15"
         app:layout_constraintBottom_toTopOf="@+id/ctrs_image"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ctrs_top" />
+        app:layout_constraintTop_toBottomOf="@+id/ctrs_top"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ctrs_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp15"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edt_content_post">
+        app:layout_constraintTop_toBottomOf="@+id/edt_status_user">
 
         <ImageView
             android:id="@+id/iv_image_user_posted"
@@ -118,6 +124,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
+            android:layout_marginEnd="@dimen/dp15"
+            android:layout_marginStart="@dimen/dp15"
             android:orientation="horizontal">
 
             <ImageView
@@ -126,7 +134,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@drawable/ic_camera"
-                android:backgroundTint="@color/colorGrey" />
+                android:backgroundTint="@color/color_main" />
 
             <ImageView
                 android:id="@+id/iv_func_video"
@@ -136,7 +144,7 @@
                 android:layout_marginStart="@dimen/dp10"
                 android:layout_marginLeft="@dimen/dp10"
                 android:background="@drawable/ic_video"
-                android:backgroundTint="@color/colorGrey" />
+                android:backgroundTint="@color/color_main" />
 
             <ImageView
                 android:id="@+id/iv_func_animations"
@@ -146,7 +154,7 @@
                 android:layout_marginStart="@dimen/dp10"
                 android:layout_marginLeft="@dimen/dp10"
                 android:background="@drawable/ic_animations"
-                android:backgroundTint="@color/colorGrey" />
+                android:backgroundTint="@color/color_main" />
 
             <ImageView
                 android:id="@+id/iv_func_collections"
@@ -155,7 +163,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp10"
                 android:background="@drawable/ic_collections"
-                android:backgroundTint="@color/colorGrey" />
+                android:backgroundTint="@color/color_main" />
 
         </LinearLayout>
 

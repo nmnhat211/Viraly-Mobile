@@ -4,11 +4,9 @@
     package="com.example.viralyapplication">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
 
     <application
         android:allowBackup="false"
@@ -16,14 +14,16 @@
         android:icon="@drawable/viraly_145x197"
         android:label="@string/app_name"
         android:largeHeap="true"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppThemeToolbar"
         android:usesCleartextTraffic="true"
-        android:requestLegacyExternalStorage="true"
         tools:replace="android:allowBackup"
         tools:targetApi="q">
-        <activity android:name=".ui.activity.CreatePostActivity"></activity>
+        <activity android:name=".ui.activity.DetailPostActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+        <activity android:name=".ui.activity.CreatePostActivity" />
         <activity android:name=".ui.activity.MainToolbarActivity" />
         <activity
             android:name=".ui.activity.SignUpActivity"

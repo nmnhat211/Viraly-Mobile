@@ -3,7 +3,9 @@ package com.example.viralyapplication.repository.model.newsfeed;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class UserModel {
+import java.io.Serializable;
+
+public class UserModel implements Serializable {
     @SerializedName("is_banned")
     @Expose
     private Boolean isBanned;

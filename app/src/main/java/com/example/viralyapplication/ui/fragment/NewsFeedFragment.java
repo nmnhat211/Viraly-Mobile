@@ -8,21 +8,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.viralyapplication.R;
-import com.example.viralyapplication.adapter.AdapterNewsFeed;
+import com.example.viralyapplication.adapter.NewsFeedAdapter;
 import com.example.viralyapplication.repository.api.NewsFeedApi;
 import com.example.viralyapplication.repository.model.getUserModel;
 import com.example.viralyapplication.repository.model.newsfeed.NewsFeedModel;
 import com.example.viralyapplication.repository.model.newsfeed.postItemModel;
 import com.example.viralyapplication.ui.activity.CreatePostActivity;
+import com.example.viralyapplication.ui.activity.DetailPostActivity;
 import com.example.viralyapplication.utility.Constant;
 import com.example.viralyapplication.utility.NetworkProfile;
 import com.example.viralyapplication.utility.Utils;
 import com.example.viralyapplication.utility.VerticalListView;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
 
@@ -30,7 +36,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NewsFeedFragment extends BaseFragment implements AdapterNewsFeed.onClickPostListener {
+public class NewsFeedFragment extends BaseFragment implements NewsFeedAdapter.onClickPostListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     public static final String KEY_USER_ID = "key_user_id";
@@ -38,14 +44,19 @@ public class NewsFeedFragment extends BaseFragment implements AdapterNewsFeed.on
     private String mParam1;
     private String mParam2;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private BottomSheetDialog mBottomSheetDialog;
+    private View mBottomSheetView;
+    private TextView tvCancel, tvEdit, tvDelete;
+    private boolean isLiked;
 
-    private AdapterNewsFeed mAdapter;
+    private NewsFeedAdapter mAdapter;
     private VerticalListView mListView;
     private ArrayList<postItemModel> mItemPost;
     private LinearLayout lnCreatePost;
     private int mCurrentPosition = -1;
     private postItemModel mPostItem;
     private Context mContext;
+    private boolean frag;
 
     public NewsFeedFragment() {
     }
@@ -82,18 +93,38 @@ public class NewsFeedFragment extends BaseFragment implements AdapterNewsFeed.on
     private void initView(View view) {
         mListView = view.findViewById(R.id.row_post);
         mItemPost = new ArrayList<>();
-        mAdapter = new AdapterNewsFeed(getContext(), mItemPost, this);
+        mAdapter = new NewsFeedAdapter(getContext(), mItemPost, this);
+        LayoutInflater inflater = getLayoutInflater();
+        ViewGroup header = (ViewGroup) inflater.inflate(R.layout.include_header_new_feed_layout, mListView, false);
+        ViewGroup footer = (ViewGroup) inflater.inflate(R.layout.include_footer_content_layout, mListView, false);
+        mListView.addHeaderView(header, null, false);
+        mListView.addFooterView(footer, null, false);
         mListView.setAdapter(mAdapter);
         lnCreatePost = view.findViewById(R.id.lv_create_post);
         lnCreatePost.setOnClickListener(this);
+
+        mBottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.BottomSheetDialogTheme);
+        mBottomSheetView = LayoutInflater.from(getActivity().
+                getApplicationContext()).inflate(
+                R.layout.bottom_sheet_layout,
+                (ConstraintLayout) view.findViewById(R.id.ctns_bottom_sheet));
+        mBottomSheetDialog.setContentView(mBottomSheetView);
+
+
+        tvCancel = mBottomSheetView.findViewById(R.id.tv_cancel_bottom);
+        tvEdit = mBottomSheetView.findViewById(R.id.tv_edt_option);
+        tvDelete = mBottomSheetView.findViewById(R.id.tv_delete_option);
+
         mSwipeRefreshLayout = view.findViewById(R.id.swipe_container);
         mSwipeRefreshLayout.setColorScheme(R.color.color_main);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getNewFeed();
-            }
+        mSwipeRefreshLayout.setOnRefreshListener(() -> {
+            frag = true;
+            getNewFeed();
         });
+
+        tvEdit.setOnClickListener(this);
+        tvDelete.setOnClickListener(this);
+        tvCancel.setOnClickListener(this);
 
     }
 
@@ -126,13 +157,17 @@ public class NewsFeedFragment extends BaseFragment implements AdapterNewsFeed.on
     }
 
     public void getNewFeed() {
-        showProgressDialog();
+        if (!frag) {
+            showProgressDialog();
+        }
         NewsFeedApi api = NetworkProfile.getRetrofitInstance().create(NewsFeedApi.class);
         Call<NewsFeedModel> call = api.getNewsFeed();
         call.enqueue(new Callback<NewsFeedModel>() {
             @Override
             public void onResponse(Call<NewsFeedModel> call, Response<NewsFeedModel> response) {
                 dismissProgressDialog();
+                refreshCompleted();
+                frag = false;
                 if (response.code() == Constant.IS_SUCCESS) {
                     if (response.body().getPosts() != null) {
                         mItemPost.clear();
@@ -143,13 +178,13 @@ public class NewsFeedFragment extends BaseFragment implements AdapterNewsFeed.on
                 } else {
                     Utils.handleErrorMessages(mContext, response, R.string.server_error);
                 }
-                refreshCompleted();
             }
 
             @Override
             public void onFailure(Call<NewsFeedModel> call, Throwable t) {
                 dismissProgressDialog();
                 refreshCompleted();
+                frag = false;
                 Utils.showAlertDialogOk(getContext(),
                         getString(R.string.error_txt),
                         t.getMessage(),
@@ -161,22 +196,40 @@ public class NewsFeedFragment extends BaseFragment implements AdapterNewsFeed.on
     }
 
     @Override
-    public void onClick(View v) {
-        super.onClick(v);
-        if (v.getId() == R.id.lv_create_post) {
-            Intent intent = new Intent(getActivity(), CreatePostActivity.class);
-            startActivity(intent);
+    public void onClick(View view) {
+        super.onClick(view);
+        switch (view.getId()) {
+            case R.id.lv_create_post:
+                Intent intent = new Intent(getActivity(), CreatePostActivity.class);
+                startActivity(intent);
+            case R.id.tv_edt_option:
+                Toast.makeText(mContext, "edit", Toast.LENGTH_SHORT).show();
+                mBottomSheetDialog.cancel();
+                break;
+            case R.id.tv_delete_option:
+                mBottomSheetDialog.cancel();
+                Utils.showAlertDialog(getActivity());
+                break;
+
+            case R.id.tv_cancel_bottom:
+                mBottomSheetDialog.cancel();
+                break;
+
         }
     }
 
     @Override
     public void onItemPostClickListener(postItemModel itemPost, int position) {
         mCurrentPosition = position;
+        Intent intent = new Intent(getActivity(), DetailPostActivity.class);
+        intent.putExtra(DetailPostActivity.KEY_DATA_POST, itemPost);
+        startActivity(intent);
     }
 
     @Override
     public void onLikeClickListener(postItemModel itemPost, int position) {
         mCurrentPosition = position;
+
     }
 
     @Override
@@ -184,9 +237,15 @@ public class NewsFeedFragment extends BaseFragment implements AdapterNewsFeed.on
         mCurrentPosition = position;
     }
 
+    @Override
+    public void onClickOptionListener(postItemModel itemPost, int position) {
+        mBottomSheetDialog.show();
+    }
+
     private void refreshCompleted() {
         if (mSwipeRefreshLayout != null) {
             mSwipeRefreshLayout.setRefreshing(false);
         }
     }
+
 }

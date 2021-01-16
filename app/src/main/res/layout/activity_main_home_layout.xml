@@ -66,14 +66,24 @@
                     android:layout_centerInParent="true"
                     android:ellipsize="end"
                     android:gravity="center"
+                    android:textAllCaps="true"
                     android:paddingLeft="@dimen/dp50"
                     android:paddingRight="@dimen/dp50"
                     android:singleLine="true"
                     android:fontFamily="@font/gilroy_heavy"
                     android:textColor="@color/colorWhite"
-                    android:textSize="20sp"
-                    android:visibility="gone"
+                    android:textSize="28sp"
+                    android:visibility="visible"
                     app:minTextSize="10sp" />
+
+                <ImageView
+                    android:id="@+id/iv_logo_app"
+                    android:layout_width="@dimen/dp50"
+                    android:layout_alignParentLeft="true"
+                    android:visibility="visible"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/viraly_145x197"
+                    android:layout_height="match_parent"/>
 
                 <RelativeLayout
                     android:id="@+id/rl_icon_right"
@@ -87,8 +97,17 @@
                         android:layout_width="@dimen/dp50"
                         android:layout_height="@dimen/dp50"
                         android:background="@drawable/ic_action_search"
+                        android:layout_centerVertical="true"
                         android:backgroundTint="@color/colorWhite"
                         android:visibility="gone" />
+                    <ImageView
+                        android:id="@+id/iv_home_tool_bar"
+                        android:layout_width="@dimen/dp40"
+                        android:layout_height="@dimen/dp40"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/ic_home"
+                        android:backgroundTint="@color/colorWhite"
+                        android:visibility="visible" />
 
                 </RelativeLayout>
             </RelativeLayout>

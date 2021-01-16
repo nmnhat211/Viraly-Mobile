@@ -28,6 +28,10 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="TitleTextViewStyle1" parent="TitleTextViewStyle">
+        <item name="android:textSize">26sp</item>
+    </style>
+
     <style name="LabelTextInputStyle">
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:fontFamily">@font/gilroy_medium</item>
@@ -64,6 +68,13 @@
         <item name="colorAccent">@color/colorWhite</item>
     </style>
 
+    <style name="button_theme_color_grey" parent="button_theme_color_main">
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="colorAccent">@color/color_background1</item>
+        <item name="background">@drawable/bg_grey_buttom_r60</item>
+    </style>
+
+
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_background</item>
     </style>
@@ -71,6 +82,14 @@
 
     <style name="AppThemeToolbar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimaryDark">@color/colorBlack</item>
+    </style>
+    
+    <style name="BottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+            <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+    </style>
+    
+    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
     </style>
 
 

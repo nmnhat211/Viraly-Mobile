@@ -1,8 +1,6 @@
 package com.example.viralyapplication.repository.model;
 
-import com.example.viralyapplication.adapter.RecyclerViewItem;
-
-public class FooterModel extends RecyclerViewItem {
+public class FooterModel {
     private String gmail;
     private String nameApp;
     private String Image;

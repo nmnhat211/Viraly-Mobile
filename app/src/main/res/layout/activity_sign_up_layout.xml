@@ -24,7 +24,6 @@
             android:orientation="vertical">
 
             <include
-                android:layout_marginTop="@dimen/dp40"
                 layout="@layout/include_icon_app_layout"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content" />
@@ -34,7 +33,7 @@
                 style="@style/TitleTextViewStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp40"
+                android:layout_marginTop="@dimen/dp30"
                 android:layout_gravity="center"
                 android:gravity="center_vertical"
                 android:text="@string/title_sign_up" />
@@ -45,7 +44,7 @@
                 android:layout_marginHorizontal="@dimen/dp30"
                 app:cardCornerRadius="@dimen/dp30"
                 app:cardElevation="@dimen/dp10"
-                android:layout_marginTop="@dimen/dp40"
+                android:layout_marginTop="@dimen/dp30"
                 app:cardPreventCornerOverlap="true">
 
                 <LinearLayout
