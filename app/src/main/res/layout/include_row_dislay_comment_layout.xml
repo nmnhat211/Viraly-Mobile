@@ -54,13 +54,13 @@
                 android:text="nnhnhat"
                 android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/tv_content_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/gilroy_medium"
-                android:text="aaaaaaaaaaaaaaaaaaaaaaaaat"
-                android:textSize="20sp" />
+        <TextView
+            android:id="@+id/tv_content_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="41dp"
+            android:fontFamily="@font/gilroy_medium"
+            android:text="Amazing for Binz"
+            android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/tv_time_comment"

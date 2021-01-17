@@ -44,13 +44,6 @@
                         android:backgroundTint="@color/colorWhite"
                         android:visibility="gone" />
 
-                    <ImageView
-                        android:id="@+id/iv_home"
-                        android:layout_width="@dimen/dp50"
-                        android:layout_height="@dimen/dp50"
-                        android:background="@drawable/ic_action_home"
-                        android:backgroundTint="@color/colorWhite"
-                        android:visibility="gone" />
                 </RelativeLayout>
 
                 <me.grantland.widget.AutofitTextView
@@ -64,8 +57,10 @@
                     android:paddingLeft="@dimen/dp50"
                     android:paddingRight="@dimen/dp50"
                     android:singleLine="true"
-                    android:textSize="@dimen/dp20"
+                    android:fontFamily="@font/gilroy_heavy"
                     android:textColor="@color/colorWhite"
+                    android:textSize="28sp"
+                    android:textAllCaps="true"
                     android:visibility="gone"
                     app:minTextSize="18sp" />
 
@@ -93,6 +88,15 @@
                         android:textAllCaps="true"
                         android:text="@string/post_text"
                         android:layout_height="wrap_content"/>
+
+                    <ImageView
+                        android:id="@+id/iv_home"
+                        android:layout_width="@dimen/dp40"
+                        android:layout_height="@dimen/dp40"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/ic_home"
+                        android:backgroundTint="@color/colorWhite"
+                        android:visibility="gone" />
 
                 </RelativeLayout>
             </RelativeLayout>

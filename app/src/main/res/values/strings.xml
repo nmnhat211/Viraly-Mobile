@@ -49,8 +49,8 @@
     <string name="setting_text">Setting</string>
     <string name="status_hint_text">Write here something…</string>
     <string name="public_text">Public</string>
-    <string name="post_update_text">Post Update</string>
-    <string name="post_text">Post</string>
+    <string name="post_update_text">Edit Post</string>
+    <string name="post_text">Update</string>
     <string name="cancel_text">Cancel</string>
     <string name="infor_content_text">2020 - Viraly Team</string>
     <string name="support_viraly_com_text">Support@viraly.com</string>

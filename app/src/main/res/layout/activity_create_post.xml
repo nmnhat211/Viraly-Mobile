@@ -54,7 +54,7 @@
             android:layout_marginLeft="@dimen/dp15"
             android:ellipsize="end"
             android:fontFamily="@font/gilroy_bold"
-            android:text="username"
+            android:text="nmnhat211"
             android:textColor="@color/color_main"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
